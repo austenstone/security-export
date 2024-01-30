@@ -10,6 +10,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./
+        id: export
         with:
           token: ${{ secrets.PAT }}
           enterprise: ${{ vars.enterprise }}
+      - run: echo "${{ steps.export.outputs.dependabot }}" > dependabot.json
+      - run: echo "${{ steps.export.outputs.code-scanning }}" > code-scanning.json
+      - run: echo "${{ steps.export.outputs.secret-scanning }}" > secret-scanning.json
+      

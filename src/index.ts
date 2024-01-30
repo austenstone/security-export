@@ -1,11 +1,14 @@
-import { getInput, info } from "@actions/core";
-import { getOctokit } from "@actions/github";
+import { getInput, group, setOutput } from "@actions/core";
+import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
 
 interface Input {
   token: string;
   organization?: string;
   enterprise?: string;
   repository?: string;
+  dependabot?: boolean;
+  codeScanning?: boolean;
+  secretScanning?: boolean;
 }
 
 export function getInputs(): Input {
@@ -17,65 +20,37 @@ export function getInputs(): Input {
   result.repository = getInput("repository");
   result.organization = getInput("organization");
   result.enterprise = getInput("enterprise");
+  if (!result.repository && !result.organization && !result.enterprise) {
+    throw new Error("organization, enterprise, or repository is required");
+  }
   return result;
 }
 
 
-const run = async (): Promise<void> => {
+export const run = async (): Promise<void> => {
   const input = getInputs();
-  const octokit = getOctokit(input.token, {
-    throttle: {
-      onRateLimit: (retryAfter, options, octokit, retryCount) => {
-        octokit.log.warn(`Request quota exhausted for request ${options.method} ${options.url}`,);
+  const octokit = getOctokit(input.token);
 
-        if (retryCount < 1) {
-          octokit.log.info(`Retrying after ${retryAfter} seconds!`);
-          return true;
-        }
-        return false;
-      },
-      onSecondaryRateLimit: (_, options, octokit) => {
-        octokit.log.warn(
-          `SecondaryRateLimit detected for request ${options.method} ${options.url}`,
-        );
-      },
-    },
-  });
-
-  const dependabotAlerts = await octokit.paginate({
-    method: 'GET',
-    url: input.organization ? `/orgs/${input.organization}/dependabot/alerts` : `/enterprises/${input.enterprise}/dependabot/alerts`,
-  });
-
-  console.log(dependabotAlerts);
-
-  const orgs = input.organization ? [input.organization] : await octokit.paginate({
-    method: 'GET',
-    url: '/user/orgs',
-  });
-
-  const repos = orgs.map(async (org) => {
-    return await octokit.paginate({
-      method: 'GET',
-      url: `/orgs/${org}/repos`,
+  if (input.dependabot) {
+    const dependabotAlerts = group('Dependabot Alerts', async () => {
+      return getDependabotAlerts(octokit, input);
     });
-  }).flat();
-  
-  const codeScanningAlerts = repos.map(async (repo) => {
-    return await octokit.paginate({
-      method: 'GET',
-      url: `/repos/${repo.full_name}/code-scanning/alerts`,
+    setOutput('dependabot', JSON.stringify(dependabotAlerts));
+  }
+
+  if (input.codeScanning) {
+    const codeScanningAlerts = await group('Code Scanning Alerts', async () => {
+      return getCodeScanningAlerts(octokit, input);
     });
-  });
+    setOutput('code-scanning', JSON.stringify(codeScanningAlerts));
+  }
 
-  console.log(codeScanningAlerts);
-
-  const secretScanningAlerts = await octokit.paginate({
-    method: 'GET',
-    url: input.organization ? `/orgs/${input.organization}/secret-scanning/alerts` : `/enterprises/${input.enterprise}/secret-scanning/alerts`,
-  });
-
-  console.log(secretScanningAlerts);
+  if (input.secretScanning) {
+    const secretScanningAlerts = await group('Secret Scanning Alerts', async () => {
+      return getSecretScanningAlerts(octokit, input);
+    });
+    setOutput('secret-scanning', JSON.stringify(secretScanningAlerts));
+  }
 };
 
 run();

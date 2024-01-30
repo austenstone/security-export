@@ -1,15 +1,46 @@
-name: TypeScript Action
+name: GitHub Security Alert Export
 author: Austen Stone
-description: A TypeScript Action
+description: Exports GitHub code scanning, secret scanning, and dependabot security alerts to JSON
 branding:
-  icon: "plus"
-  color: "blue"
+  icon: "alert-triangle"
+  color: "red"
 
 inputs:
   github-token:
     description: The GitHub token used to create an authenticated client
     default: ${{ github.token }}
     required: false
+  organization:
+    description: The GitHub organization
+    required: false
+    default: ${{ github.repository_owner }}
+  repository:
+    description: The GitHub repository
+    required: false
+    default: ${{ github.repository }}
+  enterprise:
+    description: The GitHub Enterprise
+    required: false
+  code-scanning:
+    description: Whether to export code scanning alerts
+    required: false
+    default: true
+  secret-scanning:
+    description: Whether to export secret scanning alerts
+    required: false
+    default: true
+  dependabot:
+    description: Whether to export dependabot alerts
+    required: false
+    default: true
+
+outputs:
+  dependabot:
+    description: Dependabot alerts as a JSON string
+  code-scanning:
+    description: Code scanning alerts as a JSON string
+  secret-scanning:
+    description: Secret scanning alerts as a JSON string
 
 runs:
   using: "node16"
