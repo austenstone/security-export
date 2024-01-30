@@ -4,11 +4,11 @@ import { getOctokit, getDependabotAlerts, getCodeScanningAlerts, getSecretScanni
 
 const TIMEOUT = (1000 * 60) * 30;
 const mockInput = {
-  enterprise: 'octodemo',
-  // organization: 'octoaustenstone',
-  organization: 'octodemo',
-  // repository: 'octoaustenstone/.github',
-  repository: 'austenstone/security-export',
+  enterprise: 'austenstone-enterprise',
+  organization: 'octoaustenstone',
+  // organization: 'octodemo',
+  repository: 'octoaustenstone/.github',
+  // repository: 'austenstone/security-export',
 }
 const input = {
   token: process.env.GITHUB_TOKEN,
