@@ -8,11 +8,11 @@ interface Input {
   enterprise?: string;
   repository?: string;
   dependabot?: boolean;
-  dependabotQueryParams?: string;
+  dependabotQueryParams: { [key: string]: string };
   codeScanning?: boolean;
-  codeScanningQueryParams?: string;
+  codeScanningQueryParams: { [key: string]: string };
   secretScanning?: boolean;
-  secretScanningQueryParams?: string;
+  secretScanningQueryParams: { [key: string]: string };
 }
 
 export function getInputs(): Input {
@@ -33,9 +33,13 @@ export function getInputs(): Input {
   if (!result.dependabot && !result.codeScanning && !result.secretScanning) {
     throw new Error("dependabot, code-scanning, or secret-scanning is required");
   }
-  result.dependabotQueryParams = getInput("dependabot-query-params");
-  result.codeScanningQueryParams = getInput("code-scanning-query-params");
-  result.secretScanningQueryParams = getInput("secret-scanning-query-params");
+  const dependabotQueryParams = getInput("dependabot-query-params");
+  result.dependabotQueryParams = dependabotQueryParams ? JSON.parse(dependabotQueryParams) : dependabotQueryParams;
+  const codeScanningQueryParams = getInput("code-scanning-query-params");
+  result.codeScanningQueryParams = codeScanningQueryParams ? JSON.parse(codeScanningQueryParams) : codeScanningQueryParams;
+  const secretScanningQueryParams = getInput("secret-scanning-query-params");
+  result.secretScanningQueryParams = secretScanningQueryParams ? JSON.parse(secretScanningQueryParams) : secretScanningQueryParams;
+  
   return result;
 }
 

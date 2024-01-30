@@ -4,11 +4,11 @@ export interface Input {
   organization?: string;
   enterprise?: string;
   repository?: string;
-  queryParams?: any;
+  queryParams?: {[key: string]: string};
 }
 
 const getCodeScanningAlerts = async (
-  octokit: (ReturnType<typeof getOctokit>),
+  octokit: ReturnType<typeof getOctokit>,
   input: Input
 ) => {
   if (input.organization) {
@@ -47,7 +47,7 @@ const getCodeScanningAlerts = async (
 };
 
 const getDependabotAlerts = async (
-  octokit: (ReturnType<typeof getOctokit>),
+  octokit: ReturnType<typeof getOctokit>,
   input: Input
 ) => {
   if (input.organization) {
@@ -120,7 +120,7 @@ const getSecretScanningAlerts = async (
   }
 };
 
-const getOctokit = (token: string): (ReturnType<typeof _getOctokit>) => {
+const getOctokit = (token: string): ReturnType<typeof _getOctokit> => {
   return _getOctokit(token, {
     throttle: {
       onRateLimit: (retryAfter, options, octokit, retryCount) => {
