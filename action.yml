@@ -10,17 +10,16 @@ inputs:
     description: The GitHub token used to create an authenticated client
     default: ${{ github.token }}
     required: false
+  enterprise:
+    description: The GitHub Enterprise
+    required: false
   organization:
     description: The GitHub organization
     required: false
-    default: ${{ github.repository_owner }}
   repository:
     description: The GitHub repository
     required: false
     default: ${{ github.repository }}
-  enterprise:
-    description: The GitHub Enterprise
-    required: false
   code-scanning:
     description: Whether to export code scanning alerts
     required: false

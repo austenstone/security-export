@@ -42,9 +42,9 @@ Various inputs are defined in [`action.yml`](action.yml):
 | Name | Description | Default |
 | --- | - | - |
 | github&#x2011;token | Token to use to authorize. | ${{&nbsp;github.token&nbsp;}} |
+| enterprise | The GitHub Enterprise | None |
 | organization | The GitHub organization | ${{ github.repository_owner }} |
 | repository | The GitHub repository | ${{ github.repository }} |
-| enterprise | The GitHub Enterprise | None |
 | code-scanning | Whether to export code scanning alerts | true |
 | secret-scanning | Whether to export secret scanning alerts | true |
 | dependabot | Whether to export dependabot alerts | true |
