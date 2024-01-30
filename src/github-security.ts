@@ -4,6 +4,7 @@ export interface Input {
   organization?: string;
   enterprise?: string;
   repository?: string;
+  queryParams?: any;
 }
 
 const getCodeScanningAlerts = async (
@@ -15,6 +16,7 @@ const getCodeScanningAlerts = async (
       "GET /orgs/{org}/code-scanning/alerts",
       {
         org: input.organization,
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -25,6 +27,7 @@ const getCodeScanningAlerts = async (
       {
         org: input.enterprise,
         // enterprise: input.enterprise,
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -34,6 +37,7 @@ const getCodeScanningAlerts = async (
       {
         owner: input.repository.split("/")[0],
         repo: input.repository.split("/")[1],
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -51,6 +55,7 @@ const getDependabotAlerts = async (
       "GET /orgs/{org}/dependabot/alerts",
       {
         org: input.organization,
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -59,6 +64,7 @@ const getDependabotAlerts = async (
       "GET /enterprises/{enterprise}/dependabot/alerts",
       {
         enterprise: input.enterprise,
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -68,6 +74,7 @@ const getDependabotAlerts = async (
       {
         owner: input.repository.split("/")[0],
         repo: input.repository.split("/")[1],
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -85,6 +92,7 @@ const getSecretScanningAlerts = async (
       "GET /orgs/{org}/secret-scanning/alerts",
       {
         org: input.organization,
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -93,6 +101,7 @@ const getSecretScanningAlerts = async (
       "GET /enterprises/{enterprise}/secret-scanning/alerts",
       {
         enterprise: input.enterprise,
+        ...input.queryParams,
       },
       (response) => response.data
     );
@@ -102,6 +111,7 @@ const getSecretScanningAlerts = async (
       {
         owner: input.repository.split("/")[0],
         repo: input.repository.split("/")[1],
+        ...input.queryParams,
       },
       (response) => response.data
     );

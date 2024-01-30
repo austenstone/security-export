@@ -24,14 +24,23 @@ inputs:
     description: Whether to export code scanning alerts
     required: false
     default: true
+  code-scanning-query-parameters:
+    description: "query parameters as JSON Ex: {\"state\": dismissed}"
+    required: false
   secret-scanning:
     description: Whether to export secret scanning alerts
     required: false
     default: true
+  secret-scanning-query-parameters:
+    description: "query parameters as JSON"
+    required: false
   dependabot:
     description: Whether to export dependabot alerts
     required: false
     default: true
+  dependabot-query-parameters:
+    description: "query parameters as JSON Ex: {\"state\": dismissed}"
+    required: false
 
 outputs:
   dependabot:

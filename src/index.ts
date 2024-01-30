@@ -8,8 +8,11 @@ interface Input {
   enterprise?: string;
   repository?: string;
   dependabot?: boolean;
+  dependabotQueryParams?: string;
   codeScanning?: boolean;
+  codeScanningQueryParams?: string;
   secretScanning?: boolean;
+  secretScanningQueryParams?: string;
 }
 
 export function getInputs(): Input {
@@ -30,34 +33,42 @@ export function getInputs(): Input {
   if (!result.dependabot && !result.codeScanning && !result.secretScanning) {
     throw new Error("dependabot, code-scanning, or secret-scanning is required");
   }
+  result.dependabotQueryParams = getInput("dependabot-query-params");
+  result.codeScanningQueryParams = getInput("code-scanning-query-params");
+  result.secretScanningQueryParams = getInput("secret-scanning-query-params");
   return result;
 }
 
 export const run = async (): Promise<void> => {
   const input = getInputs();
   const octokit = getOctokit(input.token);
+  const owner = {
+    organization: input.organization,
+    enterprise: input.enterprise,
+    repository: input.repository,
+  };
 
   startGroup('Getting GitHub Security Alerts');
   info(`Settings: ${JSON.stringify(input)}`);
   endGroup();
-
+  
   if (input.dependabot) {
     const dependabotAlerts = group('Dependabot Alerts', async () => {
-      return getDependabotAlerts(octokit, input);
+      return getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams });
     });
     setOutput('dependabot', JSON.stringify(dependabotAlerts));
   }
 
   if (input.codeScanning) {
     const codeScanningAlerts = await group('Code Scanning Alerts', async () => {
-      return getCodeScanningAlerts(octokit, input);
+      return getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams });
     });
     setOutput('code-scanning', JSON.stringify(codeScanningAlerts));
   }
 
   if (input.secretScanning) {
     const secretScanningAlerts = await group('Secret Scanning Alerts', async () => {
-      return getSecretScanningAlerts(octokit, input);
+      return getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams });
     });
     setOutput('secret-scanning', JSON.stringify(secretScanningAlerts));
   }
