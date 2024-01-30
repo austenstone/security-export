@@ -1,4 +1,4 @@
-import { endGroup, getInput, group, setOutput, startGroup } from "@actions/core";
+import { endGroup, getBooleanInput, getInput, group, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
 import { info } from "console";
 
@@ -23,6 +23,12 @@ export function getInputs(): Input {
   result.enterprise = getInput("enterprise");
   if (!result.repository && !result.organization && !result.enterprise) {
     throw new Error("organization, enterprise, or repository is required");
+  }
+  result.dependabot = getBooleanInput("dependabot");
+  result.codeScanning = getBooleanInput("code-scanning");
+  result.secretScanning = getBooleanInput("secret-scanning");
+  if (!result.dependabot && !result.codeScanning && !result.secretScanning) {
+    throw new Error("dependabot, code-scanning, or secret-scanning is required");
   }
   return result;
 }
