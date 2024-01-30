@@ -29,11 +29,22 @@ jobs:
         id: export
         with:
           github-token: ${{ secrets.PAT }}
-          enterprise: ${{ vars.enterprise }}
-      - run: echo "${{ steps.export.outputs.dependabot }}" > dependabot.json
-      - run: echo "${{ steps.export.outputs.code-scanning }}" > code-scanning.json
-      - run: echo "${{ steps.export.outputs.secret-scanning }}" > secret-scanning.json
-      
+          repository: octodemo/vulnerable-node
+      - run: echo '${{ steps.export.outputs.dependabot }}' > dependabot.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dependabot
+          path: dependabot.json
+      - run: echo '${{ steps.export.outputs.code-scanning }}' > code-scanning.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-scanning
+          path: code-scanning.json
+      - run: echo '${{ steps.export.outputs.secret-scanning }}' > secret-scanning.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: secret-scanning
+          path: secret-scanning.json
 ```
 
 ## ➡️ Inputs
