@@ -28,7 +28,7 @@ jobs:
       - uses: austenstone/security-export@main
         id: export
         with:
-          token: ${{ secrets.PAT }}
+          github-token: ${{ secrets.PAT }}
           enterprise: ${{ vars.enterprise }}
       - run: echo "${{ steps.export.outputs.dependabot }}" > dependabot.json
       - run: echo "${{ steps.export.outputs.code-scanning }}" > code-scanning.json
