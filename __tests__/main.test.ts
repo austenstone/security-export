@@ -7,8 +7,8 @@ const mockInput = {
   enterprise: 'austenstone-enterprise',
   organization: 'octoaustenstone',
   // organization: 'octodemo',
-  repository: 'octoaustenstone/.github',
-  // repository: 'austenstone/security-export',
+  // repository: 'octoaustenstone/.github',
+  repository: 'austenstone/security-export',
 }
 const input = {
   token: process.env.GITHUB_TOKEN,
