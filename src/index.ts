@@ -1,5 +1,6 @@
-import { getInput, group, setOutput } from "@actions/core";
+import { endGroup, getInput, group, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
+import { info } from "console";
 
 interface Input {
   token: string;
@@ -26,10 +27,13 @@ export function getInputs(): Input {
   return result;
 }
 
-
 export const run = async (): Promise<void> => {
   const input = getInputs();
   const octokit = getOctokit(input.token);
+
+  startGroup('Getting GitHub Security Alerts');
+  info(`Settings: ${JSON.stringify(input)}`);
+  endGroup();
 
   if (input.dependabot) {
     const dependabotAlerts = group('Dependabot Alerts', async () => {
