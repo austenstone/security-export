@@ -2,7 +2,7 @@
 This project exports GitHub code scanning, secret scanning, and dependabot security alerts to JSON.
 
 ## Usage
-Create a workflow (eg: `.github/workflows/seat-count.yml`). See [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
+Create a workflow (eg: `.github/workflows/security-export.yml`). See [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
 
 
 ### PAT(Personal Access Token)
