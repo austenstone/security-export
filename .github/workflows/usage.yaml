@@ -13,6 +13,7 @@ jobs:
         id: export
         with:
           github-token: ${{ secrets.PAT }}
+          repository: 'octodemo/vulnerable-node'
       - run: echo "${{ steps.export.outputs.dependabot }}" > dependabot.json
       - run: echo "${{ steps.export.outputs.code-scanning }}" > code-scanning.json
       - run: echo "${{ steps.export.outputs.secret-scanning }}" > secret-scanning.json
