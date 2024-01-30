@@ -43,11 +43,14 @@ Various inputs are defined in [`action.yml`](action.yml):
 | --- | - | - |
 | github&#x2011;token | Token to use to authorize. | ${{&nbsp;github.token&nbsp;}} |
 | enterprise | The GitHub Enterprise | None |
-| organization | The GitHub organization | ${{ github.repository_owner }} |
+| organization | The GitHub organization | None |
 | repository | The GitHub repository | ${{ github.repository }} |
 | code-scanning | Whether to export code scanning alerts | true |
+| code-scanning-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | None |
 | secret-scanning | Whether to export secret scanning alerts | true |
+| secret-scanning-query-parameters | Query parameters as JSON | None |
 | dependabot | Whether to export dependabot alerts | true |
+| dependabot-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | None |
 
 ## ⬅️ Outputs
 
