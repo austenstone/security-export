@@ -11,7 +11,17 @@ const getCodeScanningAlerts = async (
   octokit: ReturnType<typeof getOctokit>,
   input: Input
 ) => {
-  if (input.organization) {
+  if (input.repository) {
+    return octokit.paginate(
+      "GET /repos/{owner}/{repo}/code-scanning/alerts",
+      {
+        owner: input.repository.split("/")[0],
+        repo: input.repository.split("/")[1],
+        ...input.queryParams,
+      },
+      (response) => response.data
+    );
+  } else if (input.organization) {
     return octokit.paginate(
       "GET /orgs/{org}/code-scanning/alerts",
       {
@@ -31,16 +41,6 @@ const getCodeScanningAlerts = async (
       },
       (response) => response.data
     );
-  } else if (input.repository) {
-    return octokit.paginate(
-      "GET /repos/{owner}/{repo}/code-scanning/alerts",
-      {
-        owner: input.repository.split("/")[0],
-        repo: input.repository.split("/")[1],
-        ...input.queryParams,
-      },
-      (response) => response.data
-    );
   } else {
     throw new Error("Organization, enterprise, or repository is required");
   }
@@ -50,7 +50,17 @@ const getDependabotAlerts = async (
   octokit: ReturnType<typeof getOctokit>,
   input: Input
 ) => {
-  if (input.organization) {
+  if (input.repository) {
+    return octokit.paginate(
+      "GET /repos/{owner}/{repo}/dependabot/alerts",
+      {
+        owner: input.repository.split("/")[0],
+        repo: input.repository.split("/")[1],
+        ...input.queryParams,
+      },
+      (response) => response.data
+    );
+  } else if (input.organization) {
     return octokit.paginate(
       "GET /orgs/{org}/dependabot/alerts",
       {
@@ -68,16 +78,6 @@ const getDependabotAlerts = async (
       },
       (response) => response.data
     );
-  } else if (input.repository) {
-    return octokit.paginate(
-      "GET /repos/{owner}/{repo}/dependabot/alerts",
-      {
-        owner: input.repository.split("/")[0],
-        repo: input.repository.split("/")[1],
-        ...input.queryParams,
-      },
-      (response) => response.data
-    );
   } else {
     throw new Error("Organization, enterprise, or repository is required");
   }
@@ -87,7 +87,17 @@ const getSecretScanningAlerts = async (
   octokit: ReturnType<typeof getOctokit>,
   input: Input
 ) => {
-  if (input.organization) {
+  if (input.repository) {
+    return octokit.paginate(
+      "GET /repos/{owner}/{repo}/secret-scanning/alerts",
+      {
+        owner: input.repository.split("/")[0],
+        repo: input.repository.split("/")[1],
+        ...input.queryParams,
+      },
+      (response) => response.data
+    );
+  } else if (input.organization) {
     return octokit.paginate(
       "GET /orgs/{org}/secret-scanning/alerts",
       {
@@ -101,16 +111,6 @@ const getSecretScanningAlerts = async (
       "GET /enterprises/{enterprise}/secret-scanning/alerts",
       {
         enterprise: input.enterprise,
-        ...input.queryParams,
-      },
-      (response) => response.data
-    );
-  } else if (input.repository) {
-    return octokit.paginate(
-      "GET /repos/{owner}/{repo}/secret-scanning/alerts",
-      {
-        owner: input.repository.split("/")[0],
-        repo: input.repository.split("/")[1],
         ...input.queryParams,
       },
       (response) => response.data

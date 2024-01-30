@@ -65,6 +65,7 @@ if (mockInput.organization) {
 if (mockInput.repository) {
   test('getDependabotAlerts with repository', async () => {
     const alerts = await getDependabotAlerts(octokit, { repository: mockInput.repository });
+    console.log(alerts);
     expect(alerts).toBeDefined();
     expect(Array.isArray(alerts)).toBeTruthy();
     expect(alerts.length).toBeGreaterThanOrEqual(0);
