@@ -19,7 +19,9 @@ jobs:
         id: csv
         with:
           json: ${{ steps.export.outputs.dependabot }}
-      - run: echo "${{ steps.csv.outputs.csv }}" > csv.csv
+      - run: echo "$CSV" > csv.csv
+        env:
+          CSV: ${{ steps.csv.outputs.csv }}
       - uses: actions/upload-artifact@v4
         with:
           name: csv
