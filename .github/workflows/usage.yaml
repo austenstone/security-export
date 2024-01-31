@@ -16,6 +16,6 @@ jobs:
           repository: octodemo/vulnerable-node
       - name: Write JSON to file
         run: |
-          echo '${{ steps.export.outputs.dependabot }}' | jq '.' > dependabot.json
-          echo '${{ steps.export.outputs.code-scanning }}' | jq '.' > code-scanning.json
-          echo '${{ steps.export.outputs.secret-scanning }}' | jq '.' > secret-scanning.json
+          echo '${{ steps.export.outputs.dependabot }}' > dependabot.json
+          echo '${{ steps.export.outputs.code-scanning }}' > code-scanning.json
+          echo '${{ steps.export.outputs.secret-scanning }}'> secret-scanning.json
