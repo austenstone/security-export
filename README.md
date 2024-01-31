@@ -31,6 +31,35 @@ jobs:
           organization: octodemo
 ```
 
+#### Example to CSV
+```yml
+name: Export Security Alerts
+on:
+  workflow_dispatch:
+
+jobs:
+  run:
+    name: Export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        id: export
+        with:
+          github-token: ${{ secrets.PAT }}
+          repository: octodemo/vulnerable-node
+          create-artifact: false
+      - uses: austenstone/json-to-csv@main
+        id: csv
+        with:
+          json: ${{ steps.export.outputs.dependabot }}
+      - run: echo ${{ steps.csv.outputs.csv }} > csv.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: csv
+          path: csv.csv
+```
+
 ## ➡️ Inputs
 Various inputs are defined in [`action.yml`](action.yml):
 
