@@ -1,4 +1,4 @@
-name: Usage
+name: Usage CSV
 on:
   push:
   pull_request:
@@ -19,7 +19,7 @@ jobs:
         id: csv
         with:
           json: ${{ steps.export.outputs.dependabot }}
-      - run: echo ${{ steps.csv.outputs.csv }} > csv.csv
+      - run: echo "${{ steps.csv.outputs.csv }}" > csv.csv
       - uses: actions/upload-artifact@v4
         with:
           name: csv
