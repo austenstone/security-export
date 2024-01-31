@@ -39,7 +39,7 @@ export function getInputs(): Input {
   result.codeScanningQueryParams = codeScanningQueryParams ? JSON.parse(codeScanningQueryParams) : codeScanningQueryParams;
   const secretScanningQueryParams = getInput("secret-scanning-query-params");
   result.secretScanningQueryParams = secretScanningQueryParams ? JSON.parse(secretScanningQueryParams) : secretScanningQueryParams;
-  
+
   return result;
 }
 
@@ -58,7 +58,7 @@ export const run = async (): Promise<void> => {
 
   if (input.dependabot) {
     const dependabotAlerts = group('Dependabot Alerts', async () => {
-      const alerts = getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams });
+      const alerts = await getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams });
       info(`Dependabot Alerts: ${JSON.stringify(alerts, null, 2)}`);
       return alerts;
     });
@@ -67,7 +67,7 @@ export const run = async (): Promise<void> => {
 
   if (input.codeScanning) {
     const codeScanningAlerts = await group('Code Scanning Alerts', async () => {
-      const alerts = getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams });
+      const alerts = await getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams });
       info(`Code Scanning Alerts: ${JSON.stringify(alerts, null, 2)}`);
       return alerts;
     });
@@ -76,7 +76,7 @@ export const run = async (): Promise<void> => {
 
   if (input.secretScanning) {
     const secretScanningAlerts = await group('Secret Scanning Alerts', async () => {
-      const alerts = getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams });
+      const alerts = await getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams });
       info(`Secret Scanning Alerts: ${JSON.stringify(alerts, null, 2)}`);
       return alerts;
     });
