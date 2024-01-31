@@ -25,21 +25,21 @@ inputs:
     required: false
     default: true
   code-scanning-query-parameters:
-    description: "query parameters as JSON Ex: {\"state\": dismissed}"
+    description: "query parameters as JSON Ex: {\"state\": dismissed} https://docs.github.com/en/rest/code-scanning/code-scanning?apiVersion=2022-11-28#list-code-scanning-alerts-for-a-repository"
     required: false
   secret-scanning:
     description: Whether to export secret scanning alerts
     required: false
     default: true
   secret-scanning-query-parameters:
-    description: "query parameters as JSON"
+    description: "query parameters as JSON https://docs.github.com/en/rest/secret-scanning/secret-scanning?apiVersion=2022-11-28#list-secret-scanning-alerts-for-a-repository"
     required: false
   dependabot:
     description: Whether to export dependabot alerts
     required: false
     default: true
   dependabot-query-parameters:
-    description: "query parameters as JSON Ex: {\"state\": dismissed}"
+    description: "query parameters as JSON Ex: {\"state\": dismissed}" https://docs.github.com/en/rest/dependabot/alerts?apiVersion=2022-11-28#list-dependabot-alerts-for-a-repository"
     required: false
   create-artifact:
     description: Whether to create an artifact with the alerts

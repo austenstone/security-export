@@ -80,6 +80,7 @@ Various inputs are defined in [`action.yml`](action.yml):
 | dependabot | Dependabot alerts as a JSON string |
 | code-scanning | Code scanning alerts as a JSON string |
 | secret-scanning | Secret scanning alerts as a JSON string |
+| artifact-name | The name of the artifact |
 
 
 ## Further help
