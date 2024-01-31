@@ -15,11 +15,6 @@ jobs:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
           create-artifact: false
-      # - run: echo "$CODE_SCANNING"; echo "$SECRET_SCANNING"; echo "$DEPENDABOT"
-      #   env:
-      #     CODE_SCANNING: ${{ steps.export.outputs.code-scanning }}
-      #     SECRET_SCANNING: ${{ steps.export.outputs.secret-scanning }}
-      #     DEPENDABOT: ${{ steps.export.outputs.dependabot }}
       - uses: ./
         id: export-query-params
         with:
@@ -29,8 +24,3 @@ jobs:
           secret-scanning-query-parameters: '{ "state": "open" }'
           dependabot-query-parameters: '{ "severity": "critical", "state": "open" }'
           create-artifact: false
-      - run: echo "$CODE_SCANNING"; echo "$SECRET_SCANNING"; echo "$DEPENDABOT"
-        env:
-          CODE_SCANNING: ${{ steps.export.outputs.code-scanning }}
-          SECRET_SCANNING: ${{ steps.export.outputs.secret-scanning }}
-          DEPENDABOT: ${{ steps.export.outputs.dependabot }}
