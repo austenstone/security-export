@@ -103,6 +103,7 @@ export const run = async (): Promise<void> => {
     await Promise.all(Object.entries(results).map(async ([type, data]) => {
       const fileName = `${type}.json`;
       return new Promise<void>((resolve, reject) => {
+        console.log('Writing file', fileName, data);
         writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
       })
       // .then(() => {

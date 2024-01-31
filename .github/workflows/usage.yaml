@@ -14,12 +14,3 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
-      - name: Write JSON to file
-        run: |
-          echo "$DEPENDABOT" > dependabot.json
-          echo "$CODE_SCANNING" > code-scanning.json
-          echo "$SECRET_SCANNING" > secret-scanning.json
-        env:
-          DEPENDABOT: ${{ toJson(fromJson(steps.export.outputs.dependabot)) }}
-          CODE_SCANNING: ${{ toJson(fromJson(steps.export.outputs.code-scanning)) }}
-          SECRET_SCANNING: ${{ toJson(fromJson(steps.export.outputs.secret-scanning)) }}
