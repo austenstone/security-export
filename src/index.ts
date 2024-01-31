@@ -1,6 +1,6 @@
 import { endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
-import { info } from "console";
+import { groupEnd, info } from "console";
 
 interface Input {
   token: string;
@@ -53,7 +53,7 @@ export const run = async (): Promise<void> => {
   };
 
   startGroup('Getting GitHub Security Alerts');
-  info(`Settings: ${JSON.stringify(input, null, 2)}`);
+  info(`Input: ${JSON.stringify(input, null, 2)}`);
   endGroup();
 
   const requests = [] as Promise<any>[];
@@ -61,8 +61,10 @@ export const run = async (): Promise<void> => {
   if (input.dependabot) {
     requests.push(
       getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams }).then((results) => {
-        info(`Dependabot Alerts: ${JSON.stringify(results, null, 2)}`);
+        startGroup('Dependabot');
+        info(JSON.stringify(results, null, 2));
         setOutput('dependabot', JSON.stringify(results));
+        groupEnd();
       })
     );
   }
@@ -70,8 +72,10 @@ export const run = async (): Promise<void> => {
   if (input.codeScanning) {
     requests.push(
       getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams }).then((results) => {
-        info(`Code Scanning Alerts: ${JSON.stringify(results, null, 2)}`);
+        startGroup('Code Scanning');
+        info(JSON.stringify(results, null, 2));
         setOutput('code-scanning', JSON.stringify(results));
+        groupEnd();
       })
     );
   }
@@ -79,8 +83,10 @@ export const run = async (): Promise<void> => {
   if (input.secretScanning) {
     requests.push(
       getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams }).then((results) => {
+        startGroup('Secret Scanning');
         info(`Secret Scanning Alerts: ${JSON.stringify(results, null, 2)}`);
         setOutput('secret-scanning', JSON.stringify(results));
+        groupEnd();
       })
     );
   }
