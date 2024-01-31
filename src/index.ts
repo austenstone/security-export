@@ -1,6 +1,5 @@
-import { endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
+import { info, endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
-import { groupEnd, info } from "console";
 
 interface Input {
   token: string;
@@ -64,7 +63,7 @@ export const run = async (): Promise<void> => {
         startGroup('Dependabot');
         info(JSON.stringify(results, null, 2));
         setOutput('dependabot', JSON.stringify(results));
-        groupEnd();
+        endGroup();
       })
     );
   }
@@ -75,7 +74,7 @@ export const run = async (): Promise<void> => {
         startGroup('Code Scanning');
         info(JSON.stringify(results, null, 2));
         setOutput('code-scanning', JSON.stringify(results));
-        groupEnd();
+        endGroup();
       })
     );
   }
@@ -86,7 +85,7 @@ export const run = async (): Promise<void> => {
         startGroup('Secret Scanning');
         info(`Secret Scanning Alerts: ${JSON.stringify(results, null, 2)}`);
         setOutput('secret-scanning', JSON.stringify(results));
-        groupEnd();
+        endGroup();
       })
     );
   }
