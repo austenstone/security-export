@@ -64,7 +64,7 @@ export const run = async (): Promise<void> => {
   if (input.dependabot) {
     requests['dependabot'] = getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams }).then((results) => {
       startGroup('Dependabot');
-      info(JSON.stringify(results, null, 2));
+      // info(JSON.stringify(results, null, 2));
       setOutput('dependabot', JSON.stringify(results));
       endGroup();
     })
@@ -73,7 +73,7 @@ export const run = async (): Promise<void> => {
   if (input.codeScanning) {
     requests['code-scanning'] = getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams }).then((results) => {
       startGroup('Code Scanning');
-      info(JSON.stringify(results, null, 2));
+      // info(JSON.stringify(results, null, 2));
       setOutput('code-scanning', JSON.stringify(results));
       endGroup();
     })
@@ -82,7 +82,7 @@ export const run = async (): Promise<void> => {
   if (input.secretScanning) {
     requests['secret-scanning'] = getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams }).then((results) => {
       startGroup('Secret Scanning');
-      info(JSON.stringify(results, null, 2));
+      // info(JSON.stringify(results, null, 2));
       setOutput('secret-scanning', JSON.stringify(results));
       endGroup();
     });
