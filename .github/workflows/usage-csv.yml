@@ -15,36 +15,8 @@ jobs:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
           create-artifact: false
-      # - uses: austenstone/json-to-csv@main
-      #   id: dependabot-csv
-      #   with:
-      #     json: ${{ steps.export.outputs.dependabot }}
-      # - run: echo "$CSV" > dependabot.csv
-      #   env:
-      #     CSV: ${{ steps.dependabot-csv.outputs.csv }}
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: dependabot
-      #     path: dependabot.csv
-      # - uses: austenstone/json-to-csv@main
-      #   id: secret-scanning-csv
-      #   with:
-      #     json: ${{ steps.export.outputs.secret-scanning }}
-      # - run: echo "$CSV" > secret-scanning.csv
-      #   env:
-      #     CSV: ${{ steps.secret-scanning-csv.outputs.csv }}
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: secret-scanning
-      #     path: secret-scanning.csv
       - uses: austenstone/json-to-csv@main
         id: code-scanning-csv
         with:
-          json: ${{ steps.export.outputs.code-scanning }}
-      - run: echo "$CSV" > code-scanning.csv
-        env:
-          CSV: ${{ steps.code-scanning-csv.outputs.csv }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: code-scanning
-          path: code-scanning.csv
+          json-artifact-name: code-scanning
+      - run: echo "${{ steps.code-scanning-csv.outputs.csv }}"
