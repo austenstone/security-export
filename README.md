@@ -48,12 +48,11 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
-          create-artifact: false
       - uses: austenstone/json-to-csv@main
-        id: code-scanning-csv
         with:
-          json-artifact-name: code-scanning
-      - run: echo "${{ steps.code-scanning-csv.outputs.csv }}"
+          json-artifact-name: ${{ steps.export.outputs.artifact-name }}
+          create-artifact: true
+          create-artifact-name: "GitHub Security Alerts CSV"
 
 ```
 
