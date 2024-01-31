@@ -20,6 +20,6 @@ jobs:
           echo "$CODE_SCANNING" > code-scanning.json
           echo "$SECRET_SCANNING" > secret-scanning.json
         env:
-          DEPENDABOT: ${{ toJson(steps.export.outputs.dependabot) }}
-          CODE_SCANNING: ${{ toJson(steps.export.outputs.code-scanning) }}
-          SECRET_SCANNING: ${{ toJson(steps.export.outputs.secret-scanning) }}
+          DEPENDABOT: ${{ toJson(fromJson(steps.export.outputs.dependabot)) }}
+          CODE_SCANNING: ${{ toJson(fromJson(steps.export.outputs.code-scanning)) }}
+          SECRET_SCANNING: ${{ toJson(fromJson(steps.export.outputs.secret-scanning)) }}
