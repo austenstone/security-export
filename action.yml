@@ -45,6 +45,10 @@ inputs:
     description: Whether to create an artifact with the alerts
     required: false
     default: true
+  artifact-name:
+    description: The name of the artifact
+    required: false
+    default: "GitHub Security Alerts"
 
 outputs:
   dependabot:
@@ -53,6 +57,8 @@ outputs:
     description: Code scanning alerts as a JSON string
   secret-scanning:
     description: Secret scanning alerts as a JSON string
+  artifact-name:
+    description: The name of the artifact created
 
 runs:
   using: "node20"

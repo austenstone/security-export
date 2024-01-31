@@ -14,7 +14,8 @@ interface Input {
   codeScanningQueryParams: { [key: string]: string };
   secretScanning?: boolean;
   secretScanningQueryParams: { [key: string]: string };
-  createArtifact?: boolean;
+  createArtifact: boolean;
+  artifactName: string;
 }
 
 export function getInputs(): Input {
@@ -42,7 +43,7 @@ export function getInputs(): Input {
   const secretScanningQueryParams = getInput("secret-scanning-query-params");
   result.secretScanningQueryParams = secretScanningQueryParams ? JSON.parse(secretScanningQueryParams) : secretScanningQueryParams;
   result.createArtifact = getBooleanInput("create-artifact");
-
+  result.artifactName = getInput("artifact-name");
   return result;
 }
 
@@ -100,14 +101,13 @@ info('GitHub Security Alerts retrieved successfully');
 if (input.createArtifact) {
   startGroup('Creating GitHub Security Alerts artifact');
   const artifact = new DefaultArtifactClient();
-  await Promise.all(Object.entries(results).map(async ([type, data]) => {
+  const filenames = await Promise.all(Object.entries(results).map(async ([type, data]) => {
     const fileName = `${type}.json`;
-    return new Promise<void>((resolve, reject) => {
-      writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
-    }).then(() => {
-      return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 9 });
-    });
+    return new Promise<string>((resolve, reject) => {
+      writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve(fileName));
+    })
   }));
+  await artifact.uploadArtifact(input.artifactName, filenames, '.', { compressionLevel: 9 });
   info('GitHub Security Alerts artifact created successfully');
   endGroup();
 }

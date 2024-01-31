@@ -16,10 +16,4 @@ jobs:
           repository: octodemo/vulnerable-node
       - uses: austenstone/json-to-csv@main
         with:
-          json-artifact-name: dependabot
-      - uses: austenstone/json-to-csv@main
-        with:
-          json-artifact-name: code-scanning
-      - uses: austenstone/json-to-csv@main
-        with:
-          json-artifact-name: secret-scanning
+          json-artifact-name: ${{ steps.export.outputs.artifact-name }}
