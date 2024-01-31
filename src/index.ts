@@ -92,6 +92,7 @@ export const run = async (): Promise<void> => {
   } = Object.fromEntries(await Promise.all(
     await Object.entries(requests).map(async ([type, request]) => {
       const data = await request;
+      console.log('Data', data)
       return [type, data];
     })
   ));
