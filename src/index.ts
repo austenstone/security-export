@@ -89,8 +89,8 @@ export const run = async (): Promise<void> => {
   }
   const results = Object.fromEntries(await Promise.all(
     await Object.entries(requests).map(async ([type, request]) => {
-      const response = await request;
-      return [type, response];
+      const data = await request;
+      return [type, data];
     })
   ));
   info('GitHub Security Alerts retrieved successfully');
@@ -98,11 +98,12 @@ export const run = async (): Promise<void> => {
   if (input.createArtifact) {
     startGroup('Creating GitHub Security Alerts artifact');
     const artifact = new DefaultArtifactClient();
-    await Promise.all(Object.entries(results).map(async ([key, value]) => {
+    await Promise.all(Object.entries(results).map(async ([type, data]) => {
+      const fileName = `${type}.json`;
       return new Promise<void>((resolve, reject) => {
-        writeFile(key, JSON.stringify(value, null, 2), (err) => err ? reject(err) : resolve());
+        writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
       }).then(() => {
-        return artifact.uploadArtifact(key, [key], '.', { compressionLevel: 0 });
+        return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 0 });
       });
     }));
     info('GitHub Security Alerts artifact created successfully');
