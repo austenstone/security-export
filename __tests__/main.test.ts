@@ -91,7 +91,9 @@ if (0) {
     requests['secret-scanning'] = getSecretScanningAlerts(octokit, { repository: mockInput.repository });
     requests['code-scanning'] = getCodeScanningAlerts(octokit, { repository: mockInput.repository });
     requests['dependabot'] = getDependabotAlerts(octokit, { repository: mockInput.repository });
-    const results = Object.fromEntries(await Promise.all(
+    const results: {
+      [type: string]: any;
+    } = Object.fromEntries(await Promise.all(
       await Object.entries(requests).map(async ([type, request]) => {
         const data = await request;
         return [type, data];

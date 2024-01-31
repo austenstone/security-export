@@ -100,7 +100,7 @@ export const run = async (): Promise<void> => {
   if (input.createArtifact) {
     startGroup('Creating GitHub Security Alerts artifact');
     // const artifact = new DefaultArtifactClient();
-    console.log(Object.entries(results));
+    console.log(results);
     await Promise.all(Object.entries(results).map(async ([type, data]) => {
       const fileName = `${type}.json`;
       return new Promise<void>((resolve, reject) => {
