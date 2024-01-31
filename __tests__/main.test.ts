@@ -1,6 +1,7 @@
 import { test } from '@jest/globals';
 import 'dotenv/config';
 import { getOctokit, getDependabotAlerts, getCodeScanningAlerts, getSecretScanningAlerts } from '../src/github-security';
+import { writeFile } from 'fs';
 
 const TIMEOUT = (1000 * 60) * 30;
 const mockInput = {
@@ -81,5 +82,27 @@ if (mockInput.repository) {
     expect(alerts).toBeDefined();
     expect(Array.isArray(alerts)).toBeTruthy();
     expect(alerts.length).toBeGreaterThanOrEqual(0);
-  });  
+  });
+}
+
+if (0) {
+  test('Write to file', async () => {
+    const requests = {} as { [type: string]: Promise<any> }
+    requests['secret-scanning'] = getSecretScanningAlerts(octokit, { repository: mockInput.repository });
+    requests['code-scanning'] = getCodeScanningAlerts(octokit, { repository: mockInput.repository });
+    requests['dependabot'] = getDependabotAlerts(octokit, { repository: mockInput.repository });
+    const results = Object.fromEntries(await Promise.all(
+      await Object.entries(requests).map(async ([type, request]) => {
+        const data = await request;
+        return [type, data];
+      })
+    ));
+    await Promise.all(Object.entries(results).map(async ([type, data]) => {
+      const fileName = `${type}.json`;
+      return new Promise<void>((resolve, reject) => {
+        writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
+      });
+    }));
+    console.log(results);
+  });
 }

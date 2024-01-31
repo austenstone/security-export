@@ -1,6 +1,6 @@
 import { info, endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
-import { DefaultArtifactClient } from '@actions/artifact';
+// import { DefaultArtifactClient } from '@actions/artifact';
 import { writeFile } from "fs";
 
 interface Input {
@@ -87,7 +87,9 @@ export const run = async (): Promise<void> => {
       endGroup();
     });
   }
-  const results = Object.fromEntries(await Promise.all(
+  const results: {
+    [type: string]: any;
+  } = Object.fromEntries(await Promise.all(
     await Object.entries(requests).map(async ([type, request]) => {
       const data = await request;
       return [type, data];
@@ -97,14 +99,15 @@ export const run = async (): Promise<void> => {
 
   if (input.createArtifact) {
     startGroup('Creating GitHub Security Alerts artifact');
-    const artifact = new DefaultArtifactClient();
+    // const artifact = new DefaultArtifactClient();
     await Promise.all(Object.entries(results).map(async ([type, data]) => {
       const fileName = `${type}.json`;
       return new Promise<void>((resolve, reject) => {
         writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
-      }).then(() => {
-        return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 0 });
-      });
+      })
+      // .then(() => {
+      //   return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 0 });
+      // });
     }));
     info('GitHub Security Alerts artifact created successfully');
     endGroup();
