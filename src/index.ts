@@ -1,6 +1,6 @@
 import { info, endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
-// import { DefaultArtifactClient } from '@actions/artifact';
+import { DefaultArtifactClient } from '@actions/artifact';
 import { writeFile } from "fs";
 
 interface Input {
@@ -64,7 +64,7 @@ export const run = async (): Promise<void> => {
   if (input.dependabot) {
     requests['dependabot'] = getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams }).then((results) => {
       startGroup('Dependabot');
-      // info(JSON.stringify(results, null, 2));
+      info(JSON.stringify(results, null, 2));
       setOutput('dependabot', JSON.stringify(results));
       endGroup();
       return results;
@@ -74,7 +74,7 @@ export const run = async (): Promise<void> => {
   if (input.codeScanning) {
     requests['code-scanning'] = getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams }).then((results) => {
       startGroup('Code Scanning');
-      // info(JSON.stringify(results, null, 2));
+      info(JSON.stringify(results, null, 2));
       setOutput('code-scanning', JSON.stringify(results));
       endGroup();
       return results;
@@ -84,7 +84,7 @@ export const run = async (): Promise<void> => {
   if (input.secretScanning) {
     requests['secret-scanning'] = getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams }).then((results) => {
       startGroup('Secret Scanning');
-      // info(JSON.stringify(results, null, 2));
+      info(JSON.stringify(results, null, 2));
       setOutput('secret-scanning', JSON.stringify(results));
       endGroup();
       return results;
@@ -93,27 +93,22 @@ export const run = async (): Promise<void> => {
   const results: {
     [type: string]: any;
   } = Object.fromEntries(await Promise.all(
-    await Object.entries(requests).map(async ([type, request]) => {
-      const data = await request;
-      console.log('Data', data)
-      return [type, data];
-    })
+    await Object.entries(requests).map(async ([type, request]) => [type, await request])
   ));
   info('GitHub Security Alerts retrieved successfully');
 
   if (input.createArtifact) {
     startGroup('Creating GitHub Security Alerts artifact');
-    // const artifact = new DefaultArtifactClient();
+    const artifact = new DefaultArtifactClient();
     console.log(results);
     await Promise.all(Object.entries(results).map(async ([type, data]) => {
       const fileName = `${type}.json`;
       return new Promise<void>((resolve, reject) => {
         console.log('Writing file', fileName, data);
         writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
-      })
-      // .then(() => {
-      //   return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 0 });
-      // });
+      }).then(() => {
+        return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 0 });
+      });
     }));
     info('GitHub Security Alerts artifact created successfully');
     endGroup();
