@@ -70,14 +70,14 @@ jobs:
 
 ```
 
-## Query Parameters Example
+#### Query Parameters Example
 ```yml
           code-scanning-query-parameters: '{ "severity": "critical", "state": "open" }'
           secret-scanning-query-parameters: '{ "state": "open" }'
           dependabot-query-parameters: '{ "severity": "critical", "state": "open" }'
 ```
 
-## Artifact
+#### Artifact
 We create an artifact by default, you can disable this by setting `create-artifact` to `false`. Modify the `artifact-name` to change the name of the artifact.
 
 ```yml
