@@ -53,7 +53,9 @@ jobs:
         id: dependabot-csv
         with:
           json: ${{ steps.export.outputs.dependabot }}
-      - run: echo ${{ steps.dependabot-csv.outputs.csv }} > dependabot.csv
+      - run: echo "$CSV" > dependabot.csv
+        env:
+          CSV: ${{ steps.dependabot-csv.outputs.csv }}
       - uses: actions/upload-artifact@v4
         with:
           name: dependabot
@@ -62,7 +64,9 @@ jobs:
         id: code-scanning-csv
         with:
           json: ${{ steps.export.outputs.code-scanning }}
-      - run: echo ${{ steps.code-scanning-csv.outputs.csv }} > code-scanning.csv
+      - run: echo "$CSV" > code-scanning.csv
+        env:
+          CSV: ${{ steps.code-scanning-csv.outputs.csv }}
       - uses: actions/upload-artifact@v4
         with:
           name: code-scanning
@@ -71,11 +75,14 @@ jobs:
         id: secret-scanning-csv
         with:
           json: ${{ steps.export.outputs.secret-scanning }}
-      - run: echo ${{ steps.secret-scanning-csv.outputs.csv }} > secret-scanning.csv
+      - run: echo "$CSV" > secret-scanning.csv
+        env:
+          CSV: ${{ steps.secret-scanning-csv.outputs.csv }}
       - uses: actions/upload-artifact@v4
         with:
           name: secret-scanning
           path: secret-scanning.csv
+
 ```
 
 ## ➡️ Inputs
