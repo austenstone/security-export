@@ -13,7 +13,9 @@ Add this PAT as a secret so we can use it as input `github-token`, see [Creating
 If your organization has SAML enabled you must authorize the PAT, see [Authorizing a personal access token for use with SAML single sign-on](https://docs.github.com/en/enterprise-cloud@latest/authentication/authenticating-with-saml-single-sign-on/authorizing-a-personal-access-token-for-use-with-saml-single-sign-on).
 
 
-#### Example
+#### Basic Usage
+You can pass `enterprise`, `organization`, or `repository` to scope the export.
+
 ```yml
 name: Export Security Alerts
 on:
@@ -31,7 +33,12 @@ jobs:
           organization: octodemo
 ```
 
-#### Example to CSV
+#### CSV Format Example
+You can export to CSV using the [austenstone/json-to-csv](https://github.com/austenstone/json-to-csv) action.
+
+> [!NOTE]  
+> The output of this action might exceed the maximum size of inputs/outputs. In that case leverage the generated artifact as shown in the example.
+
 ```yml
 name: Export Security Alerts
 on:
@@ -52,9 +59,26 @@ jobs:
         with:
           json-artifact-name: ${{ steps.export.outputs.artifact-name }}
           create-artifact: true
-          create-artifact-name: "GitHub Security Alerts CSV"
+          artifact-name: "GitHub Security Alerts CSV"
 
 ```
+
+## Query Parameters Example
+```yml
+          code-scanning-query-parameters: '{ "severity": "critical", "state": "open" }'
+          secret-scanning-query-parameters: '{ "state": "open" }'
+          dependabot-query-parameters: '{ "severity": "critical", "state": "open" }'
+```
+
+## Artifact
+We create an artifact by default, you can disable this by setting `create-artifact` to `false`. Modify the `artifact-name` to change the name of the artifact.
+
+```yml
+          create-artifact: true
+          artifact-name: "GitHub Security Alerts"
+```
+
+Access the artifact via the output variable `${{ steps[*].export.outputs.artifact-name }}`.
 
 ## ➡️ Inputs
 Various inputs are defined in [`action.yml`](action.yml):
