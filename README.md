@@ -66,15 +66,15 @@ Various inputs are defined in [`action.yml`](action.yml):
 | Name | Description | Default |
 | --- | - | - |
 | github&#x2011;token | Token to use to authorize. | ${{&nbsp;github.token&nbsp;}} |
-| enterprise | The GitHub Enterprise | None |
-| organization | The GitHub organization | None |
+| enterprise | The GitHub Enterprise | N/A |
+| organization | The GitHub organization | N/A |
 | repository | The GitHub repository | ${{ github.repository }} |
 | code-scanning | Whether to export code scanning alerts | true |
-| code-scanning-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | None |
+| code-scanning-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | N/A |
 | secret-scanning | Whether to export secret scanning alerts | true |
-| secret-scanning-query-parameters | Query parameters as JSON | None |
+| secret-scanning-query-parameters | Query parameters as JSON | N/A |
 | dependabot | Whether to export dependabot alerts | true |
-| dependabot-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | None |
+| dependabot-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | N/A |
 | create-artifact | Whether to create an artifact | true |
 
 ## ⬅️ Outputs
