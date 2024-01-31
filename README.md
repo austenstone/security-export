@@ -50,14 +50,32 @@ jobs:
           repository: octodemo/vulnerable-node
           create-artifact: false
       - uses: austenstone/json-to-csv@main
-        id: csv
+        id: dependabot-csv
         with:
           json: ${{ steps.export.outputs.dependabot }}
-      - run: echo ${{ steps.csv.outputs.csv }} > csv.csv
+      - run: echo ${{ steps.dependabot-csv.outputs.csv }} > dependabot.csv
       - uses: actions/upload-artifact@v4
         with:
-          name: csv
-          path: csv.csv
+          name: dependabot
+          path: dependabot.csv
+      - uses: austenstone/json-to-csv@main
+        id: code-scanning-csv
+        with:
+          json: ${{ steps.export.outputs.code-scanning }}
+      - run: echo ${{ steps.code-scanning-csv.outputs.csv }} > code-scanning.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-scanning
+          path: code-scanning.csv
+      - uses: austenstone/json-to-csv@main
+        id: secret-scanning-csv
+        with:
+          json: ${{ steps.export.outputs.secret-scanning }}
+      - run: echo ${{ steps.secret-scanning-csv.outputs.csv }} > secret-scanning.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: secret-scanning
+          path: secret-scanning.csv
 ```
 
 ## ➡️ Inputs
