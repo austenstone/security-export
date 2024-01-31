@@ -27,17 +27,6 @@ jobs:
           name: dependabot
           path: dependabot.csv
       - uses: austenstone/json-to-csv@main
-        id: code-scanning-csv
-        with:
-          json: ${{ steps.export.outputs.code-scanning }}
-      - run: echo "$CSV" > code-scanning.csv
-        env:
-          CSV: ${{ steps.code-scanning-csv.outputs.csv }}
-      - uses: actions/upload-artifact@v4
-        with:
-          name: code-scanning
-          path: code-scanning.csv
-      - uses: austenstone/json-to-csv@main
         id: secret-scanning-csv
         with:
           json: ${{ steps.export.outputs.secret-scanning }}
@@ -48,3 +37,14 @@ jobs:
         with:
           name: secret-scanning
           path: secret-scanning.csv
+      - uses: austenstone/json-to-csv@main
+        id: code-scanning-csv
+        with:
+          json: ${{ steps.export.outputs.code-scanning }}
+      - run: echo "$CSV" > code-scanning.csv
+        env:
+          CSV: ${{ steps.code-scanning-csv.outputs.csv }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: code-scanning
+          path: code-scanning.csv
