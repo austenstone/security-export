@@ -1,5 +1,7 @@
 import { info, endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
+import { DefaultArtifactClient } from '@actions/artifact';
+import { writeFile } from "fs";
 
 interface Input {
   token: string;
@@ -12,6 +14,7 @@ interface Input {
   codeScanningQueryParams: { [key: string]: string };
   secretScanning?: boolean;
   secretScanningQueryParams: { [key: string]: string };
+  createArtifact?: boolean;
 }
 
 export function getInputs(): Input {
@@ -38,6 +41,7 @@ export function getInputs(): Input {
   result.codeScanningQueryParams = codeScanningQueryParams ? JSON.parse(codeScanningQueryParams) : codeScanningQueryParams;
   const secretScanningQueryParams = getInput("secret-scanning-query-params");
   result.secretScanningQueryParams = secretScanningQueryParams ? JSON.parse(secretScanningQueryParams) : secretScanningQueryParams;
+  result.createArtifact = getBooleanInput("create-artifact");
 
   return result;
 }
@@ -58,40 +62,66 @@ export const run = async (): Promise<void> => {
   const requests = [] as Promise<any>[];
 
   if (input.dependabot) {
-    requests.push(
-      getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams }).then((results) => {
-        startGroup('Dependabot');
-        info(JSON.stringify(results, null, 2));
-        setOutput('dependabot', JSON.stringify(results));
-        endGroup();
-      })
-    );
+    requests[0] = getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams }).then((results) => {
+      startGroup('Dependabot');
+      info(JSON.stringify(results, null, 2));
+      setOutput('dependabot', JSON.stringify(results));
+      endGroup();
+    })
   }
 
   if (input.codeScanning) {
-    requests.push(
-      getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams }).then((results) => {
-        startGroup('Code Scanning');
-        info(JSON.stringify(results, null, 2));
-        setOutput('code-scanning', JSON.stringify(results));
-        endGroup();
-      })
-    );
+    requests[1] = getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams }).then((results) => {
+      startGroup('Code Scanning');
+      info(JSON.stringify(results, null, 2));
+      setOutput('code-scanning', JSON.stringify(results));
+      endGroup();
+    })
   }
 
   if (input.secretScanning) {
-    requests.push(
-      getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams }).then((results) => {
-        startGroup('Secret Scanning');
-        info(JSON.stringify(results, null, 2));
-        setOutput('secret-scanning', JSON.stringify(results));
-        endGroup();
-      })
-    );
+    requests[2] = getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams }).then((results) => {
+      startGroup('Secret Scanning');
+      info(JSON.stringify(results, null, 2));
+      setOutput('secret-scanning', JSON.stringify(results));
+      endGroup();
+    });
   }
 
-  await Promise.all(requests);
+  const [
+    dependabotResults,
+    codeScanningResults,
+    secretScanningResults
+  ] = await Promise.all(requests);
   info('GitHub Security Alerts retrieved successfully');
+
+  if (input.createArtifact) {
+    startGroup('Creating GitHub Security Alerts artifact');
+    const artifact = new DefaultArtifactClient();
+    const files = [
+      {
+        file: 'dependabot.json',
+        data: JSON.stringify(dependabotResults, null, 2)
+      },
+      {
+        file: 'code-scanning.json',
+        data: JSON.stringify(codeScanningResults, null, 2)
+      },
+      {
+        file: 'secret-scanning.json',
+        data: JSON.stringify(secretScanningResults, null, 2)
+      }
+    ];
+    await Promise.all(files.map(({ file, data }) => {
+      return new Promise<void>((resolve, reject) => writeFile(file, data, (err) => err ? reject(err) : resolve()));
+    }));
+    await Promise.all(files.map(({ file }) => {
+      return artifact.uploadArtifact(file, [file], '.', {
+        compressionLevel: 0
+      });
+    }));
+    endGroup();
+  }
 };
 
 run();

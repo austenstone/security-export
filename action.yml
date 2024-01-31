@@ -41,6 +41,10 @@ inputs:
   dependabot-query-parameters:
     description: "query parameters as JSON Ex: {\"state\": dismissed}"
     required: false
+  create-artifact:
+    description: Whether to create an artifact with the alerts
+    required: false
+    default: true
 
 outputs:
   dependabot:
