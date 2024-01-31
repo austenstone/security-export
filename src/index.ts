@@ -36,11 +36,11 @@ export function getInputs(): Input {
   if (!result.dependabot && !result.codeScanning && !result.secretScanning) {
     throw new Error("dependabot, code-scanning, or secret-scanning is required");
   }
-  const dependabotQueryParams = getInput("dependabot-query-params");
+  const dependabotQueryParams = getInput("dependabot-query-parameters");
   result.dependabotQueryParams = dependabotQueryParams ? JSON.parse(dependabotQueryParams) : dependabotQueryParams;
-  const codeScanningQueryParams = getInput("code-scanning-query-params");
+  const codeScanningQueryParams = getInput("code-scanning-query-parameters");
   result.codeScanningQueryParams = codeScanningQueryParams ? JSON.parse(codeScanningQueryParams) : codeScanningQueryParams;
-  const secretScanningQueryParams = getInput("secret-scanning-query-params");
+  const secretScanningQueryParams = getInput("secret-scanning-query-parameters");
   result.secretScanningQueryParams = secretScanningQueryParams ? JSON.parse(secretScanningQueryParams) : secretScanningQueryParams;
   result.createArtifact = getBooleanInput("create-artifact");
   result.artifactName = getInput("artifact-name");
