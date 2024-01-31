@@ -1,4 +1,4 @@
-import { endGroup, getBooleanInput, getInput, group, setOutput, startGroup } from "@actions/core";
+import { endGroup, getBooleanInput, getInput, setOutput, startGroup } from "@actions/core";
 import { getSecretScanningAlerts, getCodeScanningAlerts, getDependabotAlerts, getOctokit } from "./github-security";
 import { info } from "console";
 
@@ -56,32 +56,38 @@ export const run = async (): Promise<void> => {
   info(`Settings: ${JSON.stringify(input, null, 2)}`);
   endGroup();
 
+  const requests = [] as Promise<any>[];
+
   if (input.dependabot) {
-    const dependabotAlerts = group('Dependabot Alerts', async () => {
-      const alerts = await getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams });
-      info(`Dependabot Alerts: ${JSON.stringify(alerts, null, 2)}`);
-      return alerts;
-    });
-    setOutput('dependabot', JSON.stringify(dependabotAlerts));
+    requests.push(
+      getDependabotAlerts(octokit, { ...owner, queryParams: input.dependabotQueryParams }).then((results) => {
+        info(`Dependabot Alerts: ${JSON.stringify(results, null, 2)}`);
+        setOutput('dependabot', JSON.stringify(results));
+      })
+    );
   }
 
   if (input.codeScanning) {
-    const codeScanningAlerts = await group('Code Scanning Alerts', async () => {
-      const alerts = await getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams });
-      info(`Code Scanning Alerts: ${JSON.stringify(alerts, null, 2)}`);
-      return alerts;
-    });
-    setOutput('code-scanning', JSON.stringify(codeScanningAlerts));
+    requests.push(
+      getCodeScanningAlerts(octokit, { ...owner, queryParams: input.codeScanningQueryParams }).then((results) => {
+        info(`Code Scanning Alerts: ${JSON.stringify(results, null, 2)}`);
+        setOutput('code-scanning', JSON.stringify(results));
+      })
+    );
   }
 
   if (input.secretScanning) {
-    const secretScanningAlerts = await group('Secret Scanning Alerts', async () => {
-      const alerts = await getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams });
-      info(`Secret Scanning Alerts: ${JSON.stringify(alerts, null, 2)}`);
-      return alerts;
-    });
-    setOutput('secret-scanning', JSON.stringify(secretScanningAlerts));
+    requests.push(
+      getSecretScanningAlerts(octokit, { ...owner, queryParams: input.secretScanningQueryParams }).then((results) => {
+        info(`Secret Scanning Alerts: ${JSON.stringify(results, null, 2)}`);
+        setOutput('secret-scanning', JSON.stringify(results));
+      })
+    );
   }
+
+  Promise.all(requests).then(() => {
+    info('GitHub Security Alerts retrieved successfully');
+  });
 };
 
 run();
