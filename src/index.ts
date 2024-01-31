@@ -67,6 +67,7 @@ export const run = async (): Promise<void> => {
       // info(JSON.stringify(results, null, 2));
       setOutput('dependabot', JSON.stringify(results));
       endGroup();
+      return results;
     })
   }
 
@@ -76,6 +77,7 @@ export const run = async (): Promise<void> => {
       // info(JSON.stringify(results, null, 2));
       setOutput('code-scanning', JSON.stringify(results));
       endGroup();
+      return results;
     })
   }
 
@@ -85,6 +87,7 @@ export const run = async (): Promise<void> => {
       // info(JSON.stringify(results, null, 2));
       setOutput('secret-scanning', JSON.stringify(results));
       endGroup();
+      return results;
     });
   }
   const results: {
