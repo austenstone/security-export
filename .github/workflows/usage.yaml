@@ -14,21 +14,21 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
-      - run: echo $JSON > dependabot.json
+      - run: echo "$JSON" > dependabot.json
         env:
           JSON: ${{ toJson(steps.export.outputs.dependabot) }}
       - uses: actions/upload-artifact@v4
         with:
           name: dependabot
           path: dependabot.json
-      - run: echo $JSON > code-scanning.json
+      - run: echo "$JSON" > code-scanning.json
         env:
           JSON: ${{ toJson(steps.export.outputs.code-scanning) }}
       - uses: actions/upload-artifact@v4
         with:
           name: code-scanning
           path: code-scanning.json
-      - run: echo $JSON > secret-scanning.json
+      - run: echo "$JSON" > secret-scanning.json
         env:
           JSON: ${{ toJson(steps.export.outputs.secret-scanning) }}
       - uses: actions/upload-artifact@v4
