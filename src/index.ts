@@ -89,6 +89,7 @@ if (input.secretScanning) {
     return results;
   });
 }
+
 const results: {
   [type: string]: any;
 } = Object.fromEntries(await Promise.all(
