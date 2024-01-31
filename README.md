@@ -4,7 +4,6 @@ This project exports GitHub code scanning, secret scanning, and dependabot secur
 ## Usage
 Create a workflow (eg: `.github/workflows/security-export.yml`). See [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
 
-
 ### PAT(Personal Access Token)
 You will need to [create a PAT(Personal Access Token)](https://github.com/settings/tokens/new?scopes=admin:org) that has `admin:org` access.
 
@@ -29,22 +28,7 @@ jobs:
         id: export
         with:
           github-token: ${{ secrets.PAT }}
-          repository: octodemo/vulnerable-node
-      - run: echo '${{ steps.export.outputs.dependabot }}' > dependabot.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dependabot
-          path: dependabot.json
-      - run: echo '${{ steps.export.outputs.code-scanning }}' > code-scanning.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: code-scanning
-          path: code-scanning.json
-      - run: echo '${{ steps.export.outputs.secret-scanning }}' > secret-scanning.json
-      - uses: actions/upload-artifact@v4
-        with:
-          name: secret-scanning
-          path: secret-scanning.json
+          organization: octodemo
 ```
 
 ## ➡️ Inputs
@@ -62,6 +46,7 @@ Various inputs are defined in [`action.yml`](action.yml):
 | secret-scanning-query-parameters | Query parameters as JSON | None |
 | dependabot | Whether to export dependabot alerts | true |
 | dependabot-query-parameters | Query parameters as JSON Ex: {"state": dismissed} | None |
+| create-artifact | Whether to create an artifact | true |
 
 ## ⬅️ Outputs
 
