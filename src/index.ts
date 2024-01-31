@@ -106,7 +106,7 @@ export const run = async (): Promise<void> => {
       return new Promise<void>((resolve, reject) => {
         writeFile(fileName, JSON.stringify(data, null, 2), (err) => err ? reject(err) : resolve());
       }).then(() => {
-        return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 0 });
+        return artifact.uploadArtifact(type, [fileName], '.', { compressionLevel: 9 });
       });
     }));
     info('GitHub Security Alerts artifact created successfully');
