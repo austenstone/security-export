@@ -108,6 +108,7 @@ if (input.createArtifact) {
     })
   }));
   await artifact.uploadArtifact(input.artifactName, filenames, '.', { compressionLevel: 9 });
+  setOutput('artifact-name', input.artifactName);
   info('GitHub Security Alerts artifact created successfully');
   endGroup();
 }
