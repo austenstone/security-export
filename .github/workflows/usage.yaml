@@ -14,6 +14,7 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
+          create-artifact: false
       - run: echo "The repository is ${{ steps.export.outputs.repository }}"
       - uses: ./
         id: export-query-params
@@ -23,3 +24,4 @@ jobs:
           code-scanning-query-parameters: '{ "severity": "critical", "state": "open" }'
           secret-scanning-query-parameters: '{ "state": "open" }'
           dependabot-query-parameters: '{ "severity": "critical", "state": "open" }'
+          create-artifact: false
