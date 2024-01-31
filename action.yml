@@ -39,7 +39,7 @@ inputs:
     required: false
     default: true
   dependabot-query-parameters:
-    description: "query parameters as JSON Ex: {\"state\": dismissed}" https://docs.github.com/en/rest/dependabot/alerts?apiVersion=2022-11-28#list-dependabot-alerts-for-a-repository"
+    description: "query parameters as JSON Ex: {\"state\": dismissed} https://docs.github.com/en/rest/dependabot/alerts?apiVersion=2022-11-28#list-dependabot-alerts-for-a-repository"
     required: false
   create-artifact:
     description: Whether to create an artifact with the alerts
