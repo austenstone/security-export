@@ -14,11 +14,8 @@ jobs:
         with:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
-      - name: Dump Context
-        run: |
-          echo "${{ toJson(github) }}"
       - name: Write JSON to file
         run: |
-          echo '${{ toJson(steps.export.outputs.dependabot) }}' > dependabot.json
-          echo '${{ toJson(steps.export.outputs.code-scanning) }}' > code-scanning.json
-          echo '${{ toJson(steps.export.outputs.secret-scanning) }}'> secret-scanning.json
+          echo '${{ toJson(fromJson(steps.export.outputs.dependabot)) }}' > dependabot.json
+          echo '${{ toJson(fromJson(steps.export.outputs.code-scanning)) }}' > code-scanning.json
+          echo '${{ toJson(fromJson(steps.export.outputs.secret-scanning)) }}'> secret-scanning.json
