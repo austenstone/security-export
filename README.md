@@ -56,8 +56,7 @@ jobs:
     name: Export
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: ./
+      - uses: austenstone/security-export@main
         id: export
         with:
           github-token: ${{ secrets.PAT }}
