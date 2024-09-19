@@ -1,5 +1,5 @@
 # GitHub Security Export
-This project exports GitHub code scanning, secret scanning, and dependabot security alerts to JSON.
+This project exports GitHub code scanning, secret scanning, and dependabot security alerts to multiple formats.
 
 ## Usage
 Create a workflow (eg: `.github/workflows/security-export.yml`). See [Creating a Workflow file](https://help.github.com/en/articles/configuring-a-workflow#creating-a-workflow-file).
