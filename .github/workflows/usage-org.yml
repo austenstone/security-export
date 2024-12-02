@@ -1,0 +1,21 @@
+name: Usage Org CSV
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        id: export
+        with:
+          github-token: ${{ secrets.PAT }}
+          organization: octodemo/vulnerable-node
+      - uses: austenstone/json-to-csv@main
+        with:
+          json-artifact-name: ${{ steps.export.outputs.artifact-name }}
+          create-artifact: true
+          artifact-name: "GitHub Security Alerts CSV"
