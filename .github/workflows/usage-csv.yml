@@ -12,7 +12,7 @@ jobs:
       - uses: ./
         id: export
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT }}
           repository: austenstone/security-export
       - uses: austenstone/json-to-csv@main
         id: csv
