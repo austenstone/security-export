@@ -21,6 +21,7 @@ jobs:
           create-artifact: true
           artifact-name: "GitHub Security Alerts CSV"
       - uses: petems/csv-to-md-table-action@master
+        id: csv-table-output
         with:
           csvinput: ${{ steps.csv.outputs.csv }}
       - run: echo "${{steps.csv-table-output.outputs.markdown-table}}" >> $GITHUB_STEP_SUMMARY
