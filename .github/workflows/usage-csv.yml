@@ -23,3 +23,6 @@ jobs:
       - uses: petems/csv-to-md-table-action@master
         with:
           csvinput: ${{ steps.csv.outputs.csv }}
+      - run: echo "${{steps.csv-table-output.outputs.markdown-table}}" >> $GITHUB_STEP_SUMMARY
+
+          
