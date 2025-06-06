@@ -12,7 +12,7 @@ jobs:
       - uses: ./
         id: export
         with:
-          github-token: ${{ secrets.PAT }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           repository: octodemo/vulnerable-node
       - uses: austenstone/json-to-csv@main
         id: csv
