@@ -15,7 +15,11 @@ jobs:
           github-token: ${{ secrets.PAT }}
           repository: octodemo/vulnerable-node
       - uses: austenstone/json-to-csv@main
+        id: csv
         with:
           json-artifact-name: ${{ steps.export.outputs.artifact-name }}
           create-artifact: true
           artifact-name: "GitHub Security Alerts CSV"
+      - uses: petems/csv-to-md-table-action@master
+        with:
+          csvinput: ${{ steps.csv.outputs.csv }}
